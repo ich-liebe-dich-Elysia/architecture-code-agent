@@ -12,7 +12,32 @@
 - 生成 Express API、依赖文件、README、Dockerfile 和 Node HTTP 测试。
 - 检查文件完整性、依赖声明、固定路由及规格副本；可选调用生成项目的 `npm test`。
 
-仓库仅保存 Agent 源码、依赖配置和本 README。本地输入文档、学习笔记、测试文件、验收记录、生成产物及 `node_modules` 不纳入版本控制。生成测试文件仍是工具本身保留的功能。
+仓库包含 Agent 源码、正式 Python 测试，以及 `output/space-fractions/` 下的生成示例项目、依赖文件、README 和 HTTP 测试。原始输入文档、学习笔记、临时验收记录、缓存及 `node_modules` 不纳入版本控制；可选的 Dockerfile 不上传。
+
+## 交付文件与快速运行
+
+| 任务要求 | 仓库中的对应内容 |
+| --- | --- |
+| 项目目录结构与项目代码 | `agent/`、`output/space-fractions/src/` |
+| 依赖文件 | 根目录 `requirements.txt`、`pyproject.toml`；示例中的 `package.json`、`package-lock.json` |
+| README | 根目录和示例项目各有一份 README |
+| 测试用例 | `tests/test_*.py`、`output/space-fractions/tests/app.test.js` |
+| Dockerfile（可选） | 未上传，可由 Agent 在本地生成 |
+
+克隆后可直接运行已提交的示例，无须先准备架构文档。在仓库根目录执行：
+
+```powershell
+# Agent 的 10 个正式测试，输入数据来自 tests/fixtures.py
+py -3 -m unittest discover -s tests -v
+
+# 安装锁定依赖，运行生成项目的 2 个 HTTP 测试，再启动服务
+Set-Location '.\output\space-fractions'
+npm.cmd ci
+npm.cmd test
+npm.cmd start
+```
+
+Python 测试使用仓库内置的代表性输入，不依赖本机的 `RotationTask(1)` 目录。测试覆盖 CLI、规格校验、文档解析、UML 解析及生成流水线。
 
 ## 环境要求
 
@@ -21,9 +46,9 @@
 
 Agent 只使用 Python 标准库，无须 `pip install`，也无需配置模型 API Key。
 
-## 快速体验：使用内置示例规格
+## 重新生成：使用内置示例规格
 
-克隆仓库后，在仓库根目录的 PowerShell 中逐条执行：
+需要体验生成流程时，在仓库根目录的 PowerShell 中逐条执行：
 
 ```powershell
 # 使用内置示例，不依赖未随仓库上传的架构文档
@@ -101,12 +126,13 @@ output/
    ├─ src/
    ├─ tests/
    ├─ README.md
-   └─ Dockerfile
+   └─ Dockerfile              # 本地生成的可选文件，不随仓库上传
 ```
 
-安装生成项目的 npm 依赖后，在仓库根目录执行：
+`generation_plan.json` 保存原始生成计划，其中包含可选的 Dockerfile 和 `.dockerignore`。仓库中未提交这两个文件，因此需要先在本地重新生成，再做包含全部计划文件的验证。安装示例项目的 npm 依赖后，在仓库根目录执行：
 
 ```powershell
+py -3 -m agent.cli generate
 py -3 -m agent.cli validate --run-npm-tests
 ```
 
@@ -120,7 +146,28 @@ py -3 -m agent.cli --help
 
 再次生成会覆盖模板对应的输出文件，需要保留的手工修改请另行保存。
 
-## 源码结构
+## 仓库结构
+
+```text
+architecture-code-agent/
+├─ agent/                     # Agent 源码，模块职责见下方
+├─ tests/                     # 正式 Python 测试及自包含测试数据
+├─ output/
+│  ├─ architecture_spec.json  # 原始输入解析得到的规格快照
+│  ├─ generation_plan.json    # 对应的生成计划
+│  └─ space-fractions/
+│     ├─ src/                # 生成的 Express 源码
+│     ├─ tests/app.test.js    # 生成项目的 HTTP 测试
+│     ├─ package.json
+│     ├─ package-lock.json
+│     ├─ architecture_spec.json
+│     └─ README.md
+├─ requirements.txt
+├─ pyproject.toml
+└─ README.md
+```
+
+Agent 模块职责：
 
 ```text
 agent/

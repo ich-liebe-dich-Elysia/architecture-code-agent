@@ -1,0 +1,93 @@
+{
+  "project_name": "space-fractions",
+  "architecture_style": "microservices",
+  "technology_stack": {
+    "runtime": "Node.js 18-20",
+    "web_framework": "Express.js 4-5",
+    "api_style": "RESTful API",
+    "database": "PostgreSQL 14-15",
+    "cache": "Redis 6-7",
+    "messaging": "RabbitMQ 3-4",
+    "search": "Elasticsearch 7-8",
+    "authentication": "OAuth2",
+    "observability": "Prometheus 2-3",
+    "ci_cd": "Jenkins 2-3",
+    "container_runtime": "Docker 20-21",
+    "infrastructure": "Terraform 1-2"
+  },
+  "actors": [
+    "EndUser",
+    "Admin"
+  ],
+  "components": [
+    "GameComponent",
+    "QuestionComponent",
+    "UserComponent",
+    "AdminComponent"
+  ],
+  "entities": [
+    "Game",
+    "Question",
+    "User",
+    "Admin"
+  ],
+  "use_cases": [
+    "PlayGame",
+    "ViewScore",
+    "UpdateQuestions",
+    "ViewHelp"
+  ],
+  "api_endpoints": [
+    {
+      "method": "GET",
+      "path": "/play",
+      "summary": "Play the game"
+    }
+  ],
+  "data_entities": [
+    "games"
+  ],
+  "deployment_notes": [
+    "Kubernetes deployment",
+    "3 replicas",
+    "PostgreSQL replication"
+  ],
+  "relationships": [
+    "Game --* Question",
+    "User --* Game",
+    "Admin --* Question",
+    "Game -- User",
+    "Game -- Admin",
+    "GameComponent -- QuestionComponent",
+    "GameComponent -- UserComponent",
+    "GameComponent -- AdminComponent",
+    "GameServer -- QuestionServer",
+    "GameServer -- UserClient",
+    "GameServer -- AdminClient",
+    "GameContainer -- QuestionContainer",
+    "GameContainer -- UserContainer",
+    "GameContainer -- AdminContainer"
+  ],
+  "interactions": [
+    "User -> Game: play()",
+    "Game -> Question: getPrompt()",
+    "Question -> Game: return prompt",
+    "Game -> User: display prompt",
+    "User -> Game: submit answer",
+    "Game -> Question: check answer",
+    "Question -> Game: return result",
+    "Game -> User: display result",
+    "Admin -> Question: update()",
+    "Question -> Admin: return success"
+  ],
+  "states": [
+    "Playing",
+    "Paused",
+    "GameOver"
+  ],
+  "requirements": [
+    "FR-1: Play game",
+    "NFR-1: Performance",
+    "ASR-1: Data durability"
+  ]
+}

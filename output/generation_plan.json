@@ -1,0 +1,46 @@
+{
+  "project_name": "space-fractions",
+  "target_directory": "space-fractions",
+  "files": [
+    {
+      "path": "package.json",
+      "reason": "Node.js runtime and Express dependencies."
+    },
+    {
+      "path": "src/app.js",
+      "reason": "Express application entry point and health endpoint."
+    },
+    {
+      "path": "src/routes/game.js",
+      "reason": "Implements the documented /play game API."
+    },
+    {
+      "path": "src/services/questionService.js",
+      "reason": "Separates question retrieval and answer evaluation from HTTP routing."
+    },
+    {
+      "path": "src/data/questions.js",
+      "reason": "Provides initial fraction questions owned by QuestionComponent."
+    },
+    {
+      "path": "tests/app.test.js",
+      "reason": "Node HTTP checks for /health and /play."
+    },
+    {
+      "path": "README.md",
+      "reason": "Explains architecture, setup, run, and test commands."
+    },
+    {
+      "path": "Dockerfile",
+      "reason": "Optional container execution path requested by the task."
+    },
+    {
+      "path": ".dockerignore",
+      "reason": "Keeps local dependencies out of container builds."
+    },
+    {
+      "path": "architecture_spec.json",
+      "reason": "Preserves the exact architecture input used."
+    }
+  ]
+}
