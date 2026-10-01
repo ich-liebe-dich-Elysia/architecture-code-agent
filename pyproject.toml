@@ -1,0 +1,9 @@
+[project]
+name = "simple-architecture-code-agent"
+version = "1.0.0"
+description = "Generate a starter project from architecture documents and PlantUML views."
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.unittest]
+start-directory = "tests"

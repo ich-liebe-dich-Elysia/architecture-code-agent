@@ -1,0 +1,37 @@
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Credentials and local editor settings
+.env
+.env.*
+.vscode/
+.idea/
+
+# Inputs and generated artifacts remain local
+/input/
+/output/
+node_modules/
+*.log
+
+# Test code, fixtures, coverage, and acceptance artifacts remain local
+tests/
+test/
+fixtures/
+test_*.py
+*_test.py
+*.test.*
+*.spec.*
+.pytest_cache/
+.coverage*
+htmlcov/
+coverage/
+
+# Publish README only; retain other Markdown documents locally
+*.[mM][dD]
+!README.md
