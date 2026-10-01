@@ -81,8 +81,6 @@ def build_parser() -> argparse.ArgumentParser:
 def run_check() -> int:
     """Run the first, deliberately small health check for the project."""
     print(f"{PROJECT_NAME} {PROJECT_VERSION}")
-    print("项目骨架检查通过：命令行入口可以正常运行。")
-    print("下一步将实现架构文档解析。")
     return 0
 
 
@@ -111,7 +109,6 @@ def run_sample_spec(user_path: str) -> int:
     specification = create_example_specification()
     specification.write_json(output_path)
     print(f"已写入示例架构规格：{output_path}")
-    print("注意：该文件是第 2 步的手工示例，尚未解析输入文档。")
     return 0
 
 
