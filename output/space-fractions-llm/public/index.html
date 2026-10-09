@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>星际分数探索 · 六年级分数闯关</title>
+<link rel="stylesheet" href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class="stars" aria-hidden="true">
+  <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+  <span class="star s4"></span><span class="star s5"></span><span class="star s6"></span>
+  <span class="star s7"></span><span class="star s8"></span><span class="star s9"></span>
+  <span class="star s10"></span><span class="star s11"></span><span class="star s12"></span>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="34" height="34" role="img" aria-label="行星标志">
+        <circle cx="24" cy="24" r="11" fill="#5eead4"/>
+        <ellipse cx="24" cy="24" rx="21" ry="7" fill="none" stroke="#67e8f9" stroke-width="2.4" transform="rotate(-22 24 24)"/>
+        <circle cx="41" cy="17" r="2.6" fill="#a5f3fc"/>
+      </svg>
+    </span>
+    <span class="brand-text">
+      <strong>星际分数探索</strong>
+      <small>六年级分数闯关训练</small>
+    </span>
+  </div>
+  <nav class="topnav" aria-label="主导航">
+    <button type="button" class="nav-btn" id="nav-home">开始</button>
+    <button type="button" class="nav-btn" id="nav-board">排行榜</button>
+    <button type="button" class="nav-btn" id="nav-help">帮助</button>
+    <button type="button" class="nav-btn" id="nav-admin">教师端</button>
+  </nav>
+</header>
+
+<main class="layout">
+  <section class="panel main-panel" aria-live="polite">
+
+    <div class="screen" id="screen-home">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">任务简报 · 第 6 舰队</p>
+          <h1>驾驶飞船，用分数解锁星门</h1>
+          <p class="lede">每局随机抽取 5 道分数题，答对一题获得 10 点能量。比较、等值、加减、乘除都会出现，答完即可登上星际排行榜。</p>
+          <ul class="hero-points">
+            <li>5 道题 · 每题 10 分 · 满分 50 分</li>
+            <li>答错也有解析，边玩边学</li>
+            <li>刷新页面可继续未完成的探索</li>
+          </ul>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="orbit orbit-a"><span class="planet planet-a"></span></div>
+          <div class="orbit orbit-b"><span class="planet planet-b"></span></div>
+          <div class="core">分数<br>引擎</div>
+        </div>
+      </div>
+
+      <form class="start-form" id="start-form" autocomplete="off">
+        <label class="field">
+          <span class="field-label">你的名字</span>
+          <input type="text" id="player-name" data-testid="player-name" maxlength="24" placeholder="例如：小明" aria-describedby="name-hint">
+        </label>
+        <p class="hint" id="name-hint">1 到 24 个字符，留空将使用“星际学员”。</p>
+        <div class="actions">
+          <button type="submit" class="btn primary" id="start-game" data-testid="start-game">开始探索</button>
+          <button type="button" class="btn ghost" id="home-resume-game" data-testid="resume-game" hidden>继续上次探索</button>
+        </div>
+      </form>
+      <p class="error" id="home-error" role="alert" hidden></p>
+    </div>
+
+    <div class="screen" id="screen-game" hidden>
+      <div class="game-head">
+        <div class="game-meta">
+          <span class="chip" id="player-chip">星际学员</span>
+          <span class="chip" id="progress-chip">第 1 / 5 题</span>
+        </div>
+        <div class="score-box">
+          <span class="score-label">当前能量</span>
+          <span class="score-value" id="score" data-testid="score">0</span>
+        </div>
+      </div>
+
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div>
+
+      <h2 class="question" id="question" data-testid="question">正在加载题目…</h2>
+
+      <div class="options" id="options" role="group" aria-label="答案选项"></div>
+
+      <div class="feedback" id="feedback" aria-live="polite" hidden></div>
+
+      <div class="actions game-actions">
+        <button type="button" class="btn primary" id="submit-answer" data-testid="submit-answer">提交答案</button>
+        <button type="button" class="btn primary" id="next-question" data-testid="next-question" hidden>下一题</button>
+        <button type="button" class="btn ghost" id="pause-game" data-testid="pause-game">暂停</button>
+      </div>
+      <p class="error" id="game-error" role="alert" hidden></p>
+    </div>
+
+    <div class="screen" id="screen-results" hidden>
+      <div class="results" id="results" data-testid="results">
+        <p class="eyebrow">任务完成</p>
+        <h2 id="results-title">探索结束</h2>
+        <p class="results-score"><span id="results-score">0</span> <small>/ 50 分</small></p>
+        <p class="results-line" id="results-line"></p>
+        <div class="actions">
+          <button type="button" class="btn primary" id="replay-game" data-testid="replay-game">再来一局</button>
+          <button type="button" class="btn ghost" id="results-board">查看排行榜</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-board" hidden>
+      <h2>星际排行榜</h2>
+      <p class="hint">仅收录已完成的探索，按分数从高到低排列，最多显示 20 条。</p>
+      <div class="table-wrap">
+        <table class="board">
+          <thead>
+            <tr><th scope="col">名次</th><th scope="col">学员</th><th scope="col">得分</th><th scope="col">题数</th><th scope="col">完成时间</th></tr>
+          </thead>
+          <tbody id="board-body"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="board-empty" hidden>还没有完成的探索记录，快去成为第一名吧！</p>
+      <div class="actions">
+        <button type="button" class="btn ghost" id="board-back">返回</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-admin" hidden>
+      <h2>教师端 · 题库管理</h2>
+      <p class="hint">输入管理员令牌后可查看并编辑题库。令牌只保存在当前浏览器会话中，不会写入页面源码。</p>
+      <div class="admin-token">
+        <label class="field">
+          <span class="field-label">管理员令牌</span>
+          <input type="password" id="admin-token" placeholder="请输入令牌">
+        </label>
+        <button type="button" class="btn primary" id="admin-load">读取题库</button>
+      </div>
+      <p class="error" id="admin-error" role="alert" hidden></p>
+      <p class="ok" id="admin-ok" role="status" hidden></p>
+      <label class="field">
+        <span class="field-label">题库 JSON（数组，5 到 100 题）</span>
+        <textarea id="admin-json" rows="14" spellcheck="false" placeholder='[{"id":"q1","prompt":"题干","options":["A","B","C","D"],"answer":"A","explanation":"解析"}]'></textarea>
+      </label>
+      <div class="actions">
+        <button type="button" class="btn primary" id="admin-save">保存题库</button>
+        <button type="button" class="btn ghost" id="admin-back">返回</button>
+      </div>
+    </div>
+
+  </section>
+
+  <aside class="panel side-panel" aria-label="侧边信息">
+    <h2 class="side-title">分数小贴士</h2>
+    <ul class="tips">
+      <li><strong>比较</strong>先通分，分母相同看分子。</li>
+      <li><strong>等值</strong>分子分母同乘或同除一个非零数。</li>
+      <li><strong>加减</strong>先通分，分母不变，分子相加减。</li>
+      <li><strong>乘法</strong>分子乘分子，分母乘分母，最后约分。</li>
+      <li><strong>除法</strong>除以一个分数等于乘它的倒数。</li>
+    </ul>
+    <div class="side-card">
+      <h3>本局规则</h3>
+      <p>5 道题，答对 +10 分，答错 +0 分，同一题只计分一次。</p>
+    </div>
+    <div class="side-card">
+      <h3>快捷操作</h3>
+      <p>数字键 1-4 选择选项，回车提交或进入下一题。</p>
+    </div>
+  </aside>
+</main>
+
+<div class="overlay" id="pause-overlay" hidden>
+  <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+    <h2 id="pause-title">探索已暂停</h2>
+    <p>飞船已进入安全轨道，随时可以继续。</p>
+    <button type="button" class="btn primary" id="pause-resume-game" data-testid="resume-game">继续探索</button>
+  </div>
+</div>
+
+<div class="overlay" id="help-overlay" hidden>
+  <div class="overlay-card wide" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <h2 id="help-title">玩法与帮助</h2>
+    <pre class="help-text" id="help-text">正在加载帮助…</pre>
+    <button type="button" class="btn primary" id="help-close">知道了</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <span>星际分数探索 · 本地教学演示版</span>
+  <span>数据保存在本机 JSON 文件中</span>
+</footer>
+</body>
+</html>

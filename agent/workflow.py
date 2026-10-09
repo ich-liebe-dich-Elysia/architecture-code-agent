@@ -17,12 +17,12 @@ from agent.validator import validate_project
 
 def default_documentation_path(project_root: Path) -> Path:
     """Return the supplied architecture-document location relative to AgentProject."""
-    return project_root.parent / "RotationTask(1)" / "Architecture_Documentation.md"
+    return project_root / "input" / "Architecture_Documentation.md"
 
 
 def default_views_path(project_root: Path) -> Path:
     """Return the supplied UML-view location relative to AgentProject."""
-    return project_root.parent / "RotationTask(1)" / "Architecture_View.md"
+    return project_root / "input" / "Architecture_View.md"
 
 
 def resolve_output_path(project_root: Path, user_path: str) -> Path:

@@ -44,3 +44,15 @@ coverage/
 # Publish README only; retain other Markdown documents locally
 *.[mM][dD]
 !README.md
+
+# Complete DeepSeek Agent delivery (keep the earlier learning files untouched)
+.build/
+key.txt
+*.key
+!/output/latest-project.json
+!/output/space-fractions-llm/
+!/output/space-fractions-llm/Dockerfile
+!/output/space-fractions-llm/.dockerignore
+/output/space-fractions-llm/data/
+/output/space-fractions-llm/.agent-state.json
+/output/space-fractions-llm/.agent-plan.json

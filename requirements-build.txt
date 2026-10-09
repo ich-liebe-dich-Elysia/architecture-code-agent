@@ -1,0 +1,2 @@
+# Optional: only required to rebuild the Windows desktop executable.
+PyInstaller>=6.0,<7

@@ -1,4 +1,4 @@
-"""Command-line entry point for the Simple Architecture Code Agent."""
+"""Command-line entry point for the DeepSeek Architecture Code Agent."""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from agent.workflow import (
 
 
 PROJECT_NAME = "Simple Architecture Code Agent"
-PROJECT_VERSION = "1.0.0"
+PROJECT_VERSION = "2.0.0"
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -23,11 +23,11 @@ def build_parser() -> argparse.ArgumentParser:
     """Create the command-line parser used by the Agent."""
     parser = argparse.ArgumentParser(
         prog="architecture-agent",
-        description="Generate a project starter from architecture documents.",
+        description="Generate, test and repair a complete game using DeepSeek and architecture documents.",
     )
     parser.add_argument(
         "command",
-        choices=("check", "sample-spec", "analyze", "plan", "generate", "validate", "run"),
+        choices=("check", "sample-spec", "analyze", "plan", "generate", "validate", "run", "build", "gui"),
         help="Run a setup check, create an example spec, or execute the architecture-to-project workflow.",
     )
     parser.add_argument(
@@ -70,6 +70,13 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run npm test for the generated project during validate or run.",
     )
+    parser.add_argument(
+        "--key-file", default=str(PROJECT_ROOT.parent / "key.txt"),
+        help="Local DeepSeek key file; DEEPSEEK_API_KEY also supported.",
+    )
+    parser.add_argument("--model", default="deepseek-flash", help="DeepSeek model ID.")
+    parser.add_argument("--max-repairs", type=int, default=2)
+    parser.add_argument("--template", action="store_true", help="Use the legacy offline template demo for run.")
     parser.add_argument(
         "--version",
         action="version",
@@ -115,6 +122,22 @@ def run_sample_spec(user_path: str) -> int:
 def main(argv: Sequence[str] | None = None) -> int:
     """Parse arguments and run the selected command."""
     args = build_parser().parse_args(argv)
+    if args.command == "gui":
+        from agent.desktop import main as desktop_main
+        return desktop_main() or 0
+    if args.command == "build" or (args.command == "run" and not args.template):
+        from agent.llm_workflow import run_generation
+        try:
+            result = run_generation(
+                Path(args.documentation), Path(args.views), PROJECT_ROOT / "output",
+                key_file=Path(args.key_file), model=args.model, max_repairs=args.max_repairs,
+                on_event=lambda event: print(f"[{event['stage']}] {event['message']}", flush=True),
+            )
+            print(f"Game ready: {result}")
+            return 0
+        except (OSError, ValueError, RuntimeError) as error:
+            print(f"Generation failed: {error}")
+            return 1
     if args.command == "check":
         return run_check()
     if args.command == "sample-spec":

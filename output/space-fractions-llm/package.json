@@ -1,0 +1,13 @@
+{
+  "name": "space-fractions",
+  "version": "2.0.0",
+  "private": true,
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "4.22.3"
+  }
+}

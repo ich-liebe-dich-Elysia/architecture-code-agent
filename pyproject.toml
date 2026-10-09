@@ -1,9 +1,6 @@
 [project]
 name = "simple-architecture-code-agent"
-version = "1.0.0"
-description = "Generate a starter project from architecture documents and PlantUML views."
+version = "2.0.0"
+description = "DeepSeek-powered desktop coding agent with a generated interactive fractions game."
 requires-python = ">=3.11"
 dependencies = []
-
-[tool.unittest]
-start-directory = "tests"
